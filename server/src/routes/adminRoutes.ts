@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import { adminLogin } from "../controllers/authController";
 import { getCollections } from "../db/mongoRepository";
 import { studentsToCSV, generateCSVFileName } from "../utils/csvExporter";
+import { verifyAdminToken } from "../middleware/authMiddleware";
 
 export const adminRouter = Router();
 
@@ -10,6 +11,9 @@ export const adminRouter = Router();
  * Admin authentication
  */
 adminRouter.post("/login", adminLogin);
+
+// require valid JWT for any subsequent route
+adminRouter.use(verifyAdminToken);
 
 /**
  * GET /admin/students

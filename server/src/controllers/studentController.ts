@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import bcrypt from "bcrypt";
 import { getCollections } from "../db/mongoRepository";
 import { Student } from "../models/Student";
 
@@ -8,10 +9,10 @@ import { Student } from "../models/Student";
  */
 export const registerStudent = async (req: Request, res: Response) => {
   try {
-    const { firstName, lastName, email, phone, fieldOfInterest } = req.body;
+    const { firstName, lastName, email, password, phone, fieldOfInterest } = req.body;
 
     // Validation
-    if (!firstName || !lastName || !email || !phone || !fieldOfInterest) {
+    if (!firstName || !lastName || !email || !password || !phone || !fieldOfInterest) {
       return res.status(400).json({
         message: "All fields are required",
       });
@@ -27,14 +28,19 @@ export const registerStudent = async (req: Request, res: Response) => {
       });
     }
 
-    // Create new student record
+    // Hash password before storing
+    const hashed = await bcrypt.hash(password, 10);
+
+    // Create new student record (role student by default)
     const now = new Date();
     const newStudent: Student = {
       firstName,
       lastName,
       email,
+      password: hashed,
       phone,
       fieldOfInterest,
+      role: "student",
       registrationDate: now,
       registrationTime: now,
     };

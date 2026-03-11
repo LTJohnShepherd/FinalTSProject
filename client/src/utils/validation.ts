@@ -30,6 +30,7 @@ export const validateRegistration = (formData: {
   firstName: string;
   lastName: string;
   email: string;
+  password?: string;
   phone: string;
   fieldOfInterest: string;
 }): { valid: boolean; errors: ValidationError[] } => {
@@ -47,6 +48,12 @@ export const validateRegistration = (formData: {
     errors.push({ field: "email", message: "Email is required" });
   } else if (!validateEmail(formData.email)) {
     errors.push({ field: "email", message: "Please enter a valid email address" });
+  }
+  
+  if (!formData.password) {
+    errors.push({ field: "password", message: "Password is required" });
+  } else if (formData.password.length < 6) {
+    errors.push({ field: "password", message: "Password must be at least 6 characters" });
   }
 
   if (!formData.phone.trim()) {
@@ -69,19 +76,44 @@ export const validateRegistration = (formData: {
  * Validate admin login form
  */
 export const validateAdminLogin = (formData: {
-  username: string;
+  email: string;
   password: string;
 }): { valid: boolean; errors: ValidationError[] } => {
   const errors: ValidationError[] = [];
 
-  if (!formData.username.trim()) {
-    errors.push({ field: "username", message: "Username is required" });
+  if (!formData.email.trim()) {
+    errors.push({ field: "email", message: "Email is required" });
+  } else if (!validateEmail(formData.email)) {
+    errors.push({ field: "email", message: "Please enter a valid email address" });
   }
 
   if (!formData.password) {
     errors.push({ field: "password", message: "Password is required" });
-  } else if (formData.password.length < 6) {
-    errors.push({ field: "password", message: "Password must be at least 6 characters" });
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors,
+  };
+};
+
+/**
+ * Validate user login form (email/password)
+ */
+export const validateUserLogin = (formData: {
+  email: string;
+  password: string;
+}): { valid: boolean; errors: ValidationError[] } => {
+  const errors: ValidationError[] = [];
+
+  if (!formData.email.trim()) {
+    errors.push({ field: "email", message: "Email is required" });
+  } else if (!validateEmail(formData.email)) {
+    errors.push({ field: "email", message: "Please enter a valid email address" });
+  }
+
+  if (!formData.password) {
+    errors.push({ field: "password", message: "Password is required" });
   }
 
   return {

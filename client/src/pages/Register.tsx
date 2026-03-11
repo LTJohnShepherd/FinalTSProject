@@ -19,6 +19,7 @@ interface FormData {
   firstName: string;
   lastName: string;
   email: string;
+  password: string;
   phone: string;
   fieldOfInterest: string;
 }
@@ -29,6 +30,7 @@ const Register = () => {
     firstName: "",
     lastName: "",
     email: "",
+    password: "",
     phone: "",
     fieldOfInterest: "",
   });
@@ -222,6 +224,7 @@ const Register = () => {
             </div>
 
             {renderField("email", "Email Address", "email", "john@example.com")}
+            {renderField("password", "Password", "password", "••••••")}
             {renderField("phone", "Phone Number", "tel", "+1 (555) 123-4567")}
             {renderField(
               "fieldOfInterest",

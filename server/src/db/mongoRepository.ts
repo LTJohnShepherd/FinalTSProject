@@ -7,9 +7,7 @@ export const initMongoRepository = async () => {
   const db = await connectMongo();
 
   collections = {
-    users: db.collection("users"),
     students: db.collection("students"),
-    admins: db.collection("admins"),
   };
 };
 

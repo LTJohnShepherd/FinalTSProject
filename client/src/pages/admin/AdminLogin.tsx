@@ -5,14 +5,14 @@ import { validateAdminLogin } from "../../utils/validation";
 import type { ValidationError } from "../../utils/validation";
 
 interface AdminLoginForm {
-  username: string;
+  email: string;
   password: string;
 }
 
 const AdminLogin = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<AdminLoginForm>({
-    username: "",
+    email: "",
     password: "",
   });
 
@@ -54,12 +54,12 @@ const AdminLogin = () => {
     setIsSubmitting(true);
 
     try {
-      await axios.post("http://localhost:3000/api/admin/login", formData);
-      // mark admin as authenticated in localStorage (temporary client-side flag)
-      try {
-        localStorage.setItem("adminAuthenticated", "true");
-      } catch (e) {
-        // ignore storage errors
+      const response = await axios.post("http://localhost:3000/api/admin/login", formData);
+      const token = response.data.token;
+      if (token) {
+        try {
+          localStorage.setItem("adminToken", token);
+        } catch {}
       }
       navigate("/admin/dashboard");
     } catch (error) {
@@ -122,32 +122,32 @@ const AdminLogin = () => {
 
           {/* Form Fields */}
           <div className="px-8 py-10 space-y-6">
-            {/* Username Field */}
+            {/* Email Field */}
             <div className="relative">
               <label
-                htmlFor="username"
+                htmlFor="email"
                 className="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2.5"
               >
-                Username
+                Email
               </label>
               <input
-                id="username"
-                type="text"
-                name="username"
-                value={formData.username}
+                id="email"
+                type="email"
+                name="email"
+                value={formData.email}
                 onChange={handleInputChange}
-                onFocus={() => setFocusedField("username")}
+                onFocus={() => setFocusedField("email")}
                 onBlur={() => setFocusedField(null)}
-                placeholder="admin"
+                placeholder="admin@example.com"
                 className={`w-full px-4 py-3 rounded-xl font-medium text-gray-900 placeholder-gray-400 transition-all duration-300 border-2 outline-none ${
-                  getFieldError("username")
+                  getFieldError("email")
                     ? "border-red-500 bg-red-50/50 focus:border-red-600 focus:ring-2 focus:ring-red-200"
-                    : focusedField === "username"
+                    : focusedField === "email"
                       ? "border-blue-500 bg-blue-50/30 focus:ring-2 focus:ring-blue-200"
                       : "border-gray-200 hover:border-gray-300"
                 }`}
               />
-              {getFieldError("username") && (
+              {getFieldError("email") && (
                 <p className="mt-2 text-xs font-semibold text-red-600 flex items-center gap-1">
                   <svg
                     className="w-4 h-4"
@@ -160,7 +160,7 @@ const AdminLogin = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                  {getFieldError("username")}
+                  {getFieldError("email")}
                 </p>
               )}
             </div>

@@ -9,9 +9,9 @@ A complete full-stack web application that provides a public landing page for pr
 ### Pages
 - **Public Registration Page** (`/register`) - For prospective students to submit their information
 - **Thank You Page** (`/thank-you`) - Confirmation after successful registration
-- **Admin Login Page** (`/admin/login`) - Authentication for admin users
+- **Admin Login Page** (`/admin/login`) - Authentication for admin users; returns a JWT token which the client stores and presents on subsequent API requests
 - **Admin Dashboard** (`/admin/dashboard`) - View all registrants and export to CSV
-- **Login Page** (`/auth/login`) - Placeholder auth layout
+- **Login Page** (`/auth/login`) - User login; authenticates against stored student accounts and receives a JWT token
 - **Dashboard Home** (`/dashboard`) - User dashboard
 
 ### Data Models
@@ -23,6 +23,7 @@ A complete full-stack web application that provides a public landing page for pr
   firstName: string
   lastName: string
   email: string
+  password: string  // bcrypt-hashed password for login
   phone: string
   fieldOfInterest: string (enum from predefined list)
   registrationDate: Date
@@ -30,13 +31,22 @@ A complete full-stack web application that provides a public landing page for pr
 }
 ```
 
-#### Admin User
+#### User Roles
+Both students and admins share the same data model; the only difference is the `role` field, which is automatically set to `"student"` on registration. Admin accounts can be created directly in the database with `role: "admin"`.
+
+Example user document:
 ```typescript
 {
   _id: ObjectId
-  username: string
-  password: string (bcrypt hashed)
-  createdAt: Date
+  firstName: string
+  lastName: string
+  email: string
+  password: string  // bcrypt-hashed password for login
+  phone: string
+  fieldOfInterest: string (enum from predefined list)
+  role: "student" | "admin"
+  registrationDate: Date
+  registrationTime: Date
 }
 ```
 
@@ -44,6 +54,7 @@ A complete full-stack web application that provides a public landing page for pr
 
 #### Public Routes
 - `POST /api/register` - Submit new student registration
+- `POST /api/login` - Student authentication; returns JWT when credentials match database
 - `POST /api/admin/login` - Admin authentication
 
 #### Admin Protected Routes
@@ -172,7 +183,6 @@ FinalTSProject/
 │   │   │   └── studentController.ts  # Student registration logic
 │   │   ├── models/
 │   │   │   ├── Student.ts            # Student type definition
-│   │   │   └── Admin.ts              # Admin type definition
 │   │   ├── routes/
 │   │   │   ├── studentRoutes.ts      # Student endpoints
 │   │   │   └── adminRoutes.ts        # Admin endpoints
@@ -200,7 +210,7 @@ FinalTSProject/
 - Secure password hashing with bcrypt
 
 ### Admin Interface
-- Username/password authentication
+- Email/password authentication (admin role required)
 - Secure session management (JWT ready)
 - View all registrant data in a table
 - Export registrant data to CSV file

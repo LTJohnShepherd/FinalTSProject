@@ -93,10 +93,10 @@ const ThankYou = () => {
             }`}
           >
             <button
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/auth/login")}
               className="w-full py-4 px-6 bg-linear-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold text-lg rounded-xl transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-500/50 hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
             >
-              Return to Home
+              Go to Login
               <svg
                 className="w-5 h-5"
                 fill="none"

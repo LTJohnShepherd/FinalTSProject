@@ -9,6 +9,7 @@ interface Student {
   email: string;
   phone: string;
   fieldOfInterest: string;
+  role?: string;
   registrationDate: string;
   registrationTime: string;
 }
@@ -21,18 +22,28 @@ const AdminDashboard = () => {
   const [isExporting, setIsExporting] = useState(false);
 
   useEffect(() => {
-    // Redirect to admin login if not authenticated
-    const isAdmin = (() => {
-      try {
-        return localStorage.getItem("adminAuthenticated") === "true";
-      } catch (e) {
-        return false;
-      }
-    })();
-    if (!isAdmin) {
+    // Redirect to login if no valid token
+    let token: string | null = null;
+    try {
+      token = localStorage.getItem("adminToken");
+    } catch {}
+    if (!token) {
       navigate("/admin/login");
       return;
     }
+    // simple expiration check without extra dependency
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      if (payload.exp && Date.now() >= payload.exp * 1000) {
+        // token expired
+        localStorage.removeItem("adminToken");
+        navigate("/admin/login");
+        return;
+      }
+    } catch {}
+
+    // attach header for future requests
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
     fetchStudents();
   }, [navigate]);
@@ -88,7 +99,8 @@ const AdminDashboard = () => {
 
   const handleLogout = () => {
     try {
-      localStorage.removeItem("adminAuthenticated");
+      localStorage.removeItem("adminToken");
+      delete axios.defaults.headers.common["Authorization"];
     } catch (e) {}
     navigate("/admin/login");
   };
