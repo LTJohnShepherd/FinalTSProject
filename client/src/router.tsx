@@ -1,19 +1,19 @@
-import { createBrowserRouter, Navigate } from "react-router";
+import { createBrowserRouter} from "react-router";
 import Home from "./pages/dashboard/Home";
 import AuthLayout from "./layouts/AuthLayout";
 import Login from "./pages/auth/Login";
 import DashboardLayout from "./layouts/DashboardLayout";
-import Register from "./pages/auth/Register";
 import Flags from "./pages/Flags";
 import PublicRegister from "./pages/Register";
 import ThankYou from "./pages/ThankYou";
+import Landing from "./pages/Landing";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="/register" replace />,
+    element: <Landing />,
   },
   {
     path: "/register",
@@ -38,10 +38,6 @@ export const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
-      },
-      {
-        path: "register",
-        element: <Register />,
       },
     ],
   },

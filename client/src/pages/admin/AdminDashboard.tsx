@@ -152,9 +152,8 @@ const AdminDashboard = () => {
               </div>
               <div className="p-3 bg-blue-500/12 rounded-lg">
                 <svg className="w-6 h-6 text-blue-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="8" cy="8" r="2" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-                  <circle cx="16" cy="8" r="2" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M2 20c2-3 6-4 10-4s8 1 10 4" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M6 20c0-3.31 2.69-6 6-6s6 2.69 6 6" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </div>
             </div>

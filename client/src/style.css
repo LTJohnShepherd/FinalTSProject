@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --color-red-200:#24dd46;
-  --text-sm:200px;
+  --color-red-200: #24dd46;
+  /* Keep default Tailwind text sizes by not overriding --text-sm globally. */
 }
 
