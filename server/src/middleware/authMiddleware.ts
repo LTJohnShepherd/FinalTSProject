@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { env } from "../config/env";
 const jwt = require("jsonwebtoken");
 
 export const verifyAdminToken = (
@@ -16,7 +17,7 @@ export const verifyAdminToken = (
   }
 
   try {
-    const payload: any = jwt.verify(token, process.env.JWT_SECRET || "");
+    const payload: any = jwt.verify(token, env.JWT_SECRET);
     // ensure user is admin
     if (payload.role !== "admin") {
       return res.status(403).json({ message: "Insufficient privileges" });

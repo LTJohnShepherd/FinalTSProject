@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { getCollections } from "../db/mongoRepository";
+import { env } from "../config/env";
 
 /**
  * Admin login
@@ -41,7 +42,7 @@ export const adminLogin = async (req: Request, res: Response) => {
     const jwt = require("jsonwebtoken");
     const token = jwt.sign(
       { adminId: admin._id.toString(), email: admin.email, role: admin.role },
-      process.env.JWT_SECRET || "",
+      env.JWT_SECRET,
       { expiresIn: "2h" }
     );
 
@@ -89,7 +90,7 @@ export const studentLogin = async (req: Request, res: Response) => {
     const jwt = require("jsonwebtoken");
     const token = jwt.sign(
       { studentId: student._id.toString(), email: student.email },
-      process.env.JWT_SECRET || "",
+      env.JWT_SECRET,
       { expiresIn: "2h" }
     );
 
